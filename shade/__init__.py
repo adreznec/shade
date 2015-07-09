@@ -1229,12 +1229,15 @@ class OpenStackCloud(object):
 
     # TODO(Shrews): This will eventually need to support tenant ID and
     # provider networks, which are admin-level params.
-    def create_network(self, name, shared=False, admin_state_up=True):
+    def create_network(self, name, shared=False, admin_state_up=True, provider_segmentation_id=None, provider_network_type='vlan', provider_physical_network='default'):
         """Create a network.
 
         :param name: Name of the network being created.
         :param shared: Set the network as shared.
         :param admin_state_up: Set the network administrative state to up.
+        :param provider_segmentation_id: Set segmentation id of network
+        :param provider_network_type: Set the network type
+        :param provider_physical_network: Set physical network
 
         :returns: The network object.
         :raises: OpenStackCloudException on operation error.
@@ -1243,7 +1246,10 @@ class OpenStackCloud(object):
         network = {
             'name': name,
             'shared': shared,
-            'admin_state_up': admin_state_up
+            'admin_state_up': admin_state_up,
+            'provider:segmentation_id': provider_segmentation_id,
+            'provider:network_type': provider_network_type,
+            'provider:physical_network': provider_physical_network
         }
 
         with self._neutron_exceptions(
